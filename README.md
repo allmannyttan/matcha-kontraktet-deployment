@@ -7,14 +7,14 @@
 5. Start the database: `docker-compose up postgres`
 6. Use your favorite postgres UI tool, log in with the POSTGRESUSER/POSTGRESPASSWORD and db name subletdetector. Create a database called api-db. Assign same owner as to subletdetector database (i.e. POSTGRESUSER).
 7. Start the rest of the services: `docker-compose up -d`
-8. Get a salt and hash for a Hitta svartkontrakt user account: http://SERVERIP:9000/auth/generate-password-hash?password=somepassword
+8. Get a salt and hash for a Matcha kontraktet user account: http://SERVERIP:9000/auth/generate-password-hash?password=somepassword
 9. Create a row in the user table of the subletdetector database
 10. Get a salt and hash for an Slussen user account: http://SERVERIP:4000/auth/generate-password-hash?password=somepassword
 11. Create a row in the user table of api-db with a username and this salt and hash
 12. Update .env: set APIUSERNAME and APIPASSWORD to the username and password above.
 13. Update services with new .env values: `docker-compose up -d`
 14. Update SYNAIP to the whitelisted IP of your server
-15. Access Hitta svartkontrakt on http://SERVERIP:3000
+15. Access Matcha kontraktet on http://SERVERIP:3000
 
 ## Updating to the latest version
 
