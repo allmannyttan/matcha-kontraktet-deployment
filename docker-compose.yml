@@ -1,0 +1,80 @@
+version: "3"
+services:
+  frontend:
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/sublet-detector/sublet-detector-frontend
+    #build: sublet-detector/packages/frontend
+    ports:
+      - 3000:80
+    networks:
+      - sublet-detector
+    environment:
+      - "REACT_APP_API_BASE_URL=${BACKENDURL}"
+    depends_on:
+      - backend
+  backend:
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/sublet-detector/sublet-detector-backend
+    #build: sublet-detector/packages/backend
+    ports:
+      - 9000:9000
+    networks:
+      - sublet-detector
+    environment:
+      - "POSTGRES__HOST=${POSTGRESHOST}"
+      - "POSTGRES__USER=${POSTGRESUSER}"
+      - "POSTGRES__PASSWORD=${POSTGRESPASSWORD}"
+      - "POSTGRES__DATABASE=${POSTGRESDATABASE}"
+      - "POSTGRES__PORT=${POSTGRESPORT}"
+      - "DATABASE_URL=postgres://${POSTGRESUSER}:${POSTGRESPASSWORD}@${POSTGRESHOST}:${POSTGRESPORT}/${POSTGRESDATABASE}"
+      - "SYNA__HOST=${SYNAHOST}"
+      - "SYNA__CALLING_IP_ADDRESS=${SYNAIP}"
+      - "SYNA__USERNAME=${SYNAUSER}"
+      - "SYNA__CUSTOMER_NUMBER=${SYNACUSTOMERNUMBER}"
+      - "API__BASE_URL=${APIBASEURL}"
+      - "API__USERNAME=${APIUSERNAME}"
+      - "API__PASSWORD=${APIPASSWORD}"
+    depends_on:
+      - postgres
+    extra_hosts:
+      - "arkivet.syna.se:192.168.88.153"
+  api:
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/api/api
+    # build: api
+    ports:
+      - 4000:4000
+    networks:
+      - sublet-detector
+    environment:
+      - "FAST_API__BASE_URL=${FASTAPIBASEURL}"
+      - "FAST_API__ACCESS_TOKEN=${FASTAPIACCESSTOKEN}"
+      - "FAST_API__USER=${FASTAPIUSER}"
+      - "FAST_API__PASSWORD=${FASTAPIPASSWORD}"
+      - "DATABASE_URL=postgres://${POSTGRESUSER}:${POSTGRESPASSWORD}@${POSTGRESHOST}:${POSTGRESPORT}/${APIDATABASE}"
+      - "POSTGRES__HOST=${POSTGRESHOST}"
+      - "POSTGRES__USER=${POSTGRESUSER}"
+      - "POSTGRES__PASSWORD=${POSTGRESPASSWORD}"
+      - "POSTGRES__DATABASE=${APIDATABASE}"
+      - "POSTGRES__PORT=${POSTGRESPORT}"
+    depends_on:
+      - postgres
+    extra_hosts:
+      - "fastapi.vatterhem.se:192.168.88.153"
+  postgres:
+    image: postgres:12.2-alpine
+    networks:
+      - sublet-detector
+    environment:
+      - "TZ=Europe/Stockholm"
+      - "POSTGRES_DB=${POSTGRESDATABASE}"
+      - "POSTGRES_USER=${POSTGRESUSER}"
+      - "POSTGRES_PASSWORD=${POSTGRESPASSWORD}"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+networks:
+  sublet-detector:
+
+volumes:
+  db-data:
+    driver: local
