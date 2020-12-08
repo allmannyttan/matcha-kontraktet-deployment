@@ -21,6 +21,7 @@ insertuser()  {
 printf "Starting up database\n"
 docker-compose up -d postgres
 
+sleep 10
 printf "\nCreating api-db database\n"
 docker-compose exec -d postgres psql subletdetector -U $POSTGRESUSER -c "create database \"$APIDATABASE\""
 
@@ -29,7 +30,7 @@ cat token.txt | docker login https://docker.pkg.github.com -u lundeeell --passwo
 
 printf "\nStarting up all services\n"
 docker-compose up -d
-sleep 5 # Wait for API to be healthy before creating user
+sleep 10 # Wait for API to be healthy before creating user
 
 printf "\nInserting Slussen user: $user\n"
 insertuser $SLUSSENURL $pw $APIDATABASE $user
