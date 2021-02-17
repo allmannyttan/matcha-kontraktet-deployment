@@ -7,7 +7,7 @@ services:
       - 443:443
     restart: unless-stopped
     networks:
-      - sublet-detector
+      - matcha-kontraktet
     volumes:
       - ${NGINXCONFDIR}:/etc/nginx/conf.d
       - ${NGINXSSLDIR}:/etc/ssl
@@ -15,27 +15,24 @@ services:
       - frontend
       - backend
       - api
-
   frontend:
-    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-frontend
-    build: ../packages/frontend
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-frontend
     ports:
       - 3000:80
     restart: unless-stopped
     networks:
-      - sublet-detector
+      - matcha-kontraktet
     environment:
       - "REACT_APP_API_BASE_URL=${BACKENDURL}"
     depends_on:
       - backend
   backend:
-    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-backend
-    build: ../packages/backend
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-backend
     ports:
       - 9000:9000
     restart: unless-stopped
     networks:
-      - sublet-detector
+      - matcha-kontraktet
     environment:
       - "POSTGRES__HOST=${POSTGRESHOST}"
       - "POSTGRES__USER=${POSTGRESUSER}"
@@ -54,13 +51,12 @@ services:
     depends_on:
       - postgres
   api:
-    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/slussen/api
-    build: ../../slussen
+    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/slussen/api
     ports:
       - 4000:4000
     restart: unless-stopped
     networks:
-      - sublet-detector
+      - matcha-kontraktet
     environment:
       - "FAST_API__BASE_URL=${FASTAPIBASEURL}"
       - "FAST_API__ACCESS_TOKEN=${FASTAPIACCESSTOKEN}"
@@ -75,12 +71,10 @@ services:
       - "POSTGRES__PORT=${POSTGRESPORT}"
     depends_on:
       - postgres
-    extra_hosts:
-      - "fastapi.vatterhem.se:192.168.88.153"
   postgres:
     image: postgres:12.2-alpine
     networks:
-      - sublet-detector
+      - matcha-kontraktet
     restart: unless-stopped
     environment:
       - "TZ=Europe/Stockholm"
@@ -93,7 +87,7 @@ services:
       - 5432:5432
 
 networks:
-  sublet-detector:
+  matcha-kontraktet:
 
 volumes:
   db-data:
