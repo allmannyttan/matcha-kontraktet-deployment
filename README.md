@@ -3,21 +3,21 @@
 1. Install docker
 2. Rename `env.template` to `.env`
 3. Change the following variables:
-   3.1 POSTGRESDBUSER/POSTGRESPASSWORD - superuser that will be created for postgres
-   3.2 APIUSERNAME/APIPASSWORD - service account that will created for Slussen
-   3.3 If you use Syna:
-   3.3.1 SYNAIP - your whitelisted IP at Syna
-   3.3.2 SYNAUSER/SYNACUSTOMERNUMBER - your login at Syna
-   3.4 If you use Creditsafe (TODO)
-   3.5 FASTAPIUSER/FASTAPIPASSWORD - service account to access fastAPI.
-   3.6 FASTAPIBASEURL - URL for fastAPI (usually ends in /v1/api/)
-   3.7 BACKENDURL -
-   3.7 USESSL - if true, will use https for frontend and backen. You need a certificate (.crt and .key files).
-   3.7.1 NGINXCONFDIR - a directory where nginx.conf will be placed, full or relative to where deployment.sh and subsequently docker-compose is run.
-   3.7.2 NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
-   3.7.3 NGINXDOMAIN - the domain name matchning your certificate
-   3.8 BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
-   3.9 GITHUBUSER - the user account used to retrieve docker images (see below)
+   1. POSTGRESDBUSER/POSTGRESPASSWORD - superuser that will be created for postgres
+   2. APIUSERNAME/APIPASSWORD - service account that will created for Slussen
+   3. If you use Syna:
+      1. SYNAIP - your whitelisted IP at Syna
+      2. SYNAUSER/SYNACUSTOMERNUMBER - your login at Syna
+   4. If you use Creditsafe (TODO)
+   5. FASTAPIUSER/FASTAPIPASSWORD - service account to access fastAPI.
+   6. FASTAPIBASEURL - URL for fastAPI (usually ends in /v1/api/)
+   7. BACKENDURL -
+   7. USESSL - if true, will use https for frontend and backen. You need a certificate (.crt and .key files).
+      1. NGINXCONFDIR - a directory where nginx.conf will be placed, full or relative to where deployment.sh and subsequently docker-compose is run.
+      2. NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
+      3. NGINXDOMAIN - the domain name matchning your certificate
+   8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
+   9. GITHUBUSER - the user account used to retrieve docker images (see below)
 4. Get a personal login token with read:packages access from your github account, save it in token.txt (https://https://github.com/settings/tokens)
 5. Run deployment script `sh ./deployment.sh`
 6. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
