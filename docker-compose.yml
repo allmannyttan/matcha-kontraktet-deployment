@@ -1,10 +1,27 @@
 version: "3"
 services:
+  nginx:
+    image: nginx:1.19.6
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    networks:
+      - sublet-detector
+    volumes:
+      - ${NGINXCONFDIR}:/etc/nginx/conf.d
+      - ${NGINXSSLDIR}:/etc/ssl
+    depends_on:
+      - frontend
+      - backend
+      - api
+
   frontend:
-    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-frontend
-    #build: sublet-detector/packages/frontend
+    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-frontend
+    build: ../packages/frontend
     ports:
       - 3000:80
+    restart: unless-stopped
     networks:
       - sublet-detector
     environment:
@@ -12,10 +29,11 @@ services:
     depends_on:
       - backend
   backend:
-    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-backend
-    #build: sublet-detector/packages/backend
+    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/matcha-kontraktet/sublet-detector-backend
+    build: ../packages/backend
     ports:
       - 9000:9000
+    restart: unless-stopped
     networks:
       - sublet-detector
     environment:
@@ -32,15 +50,15 @@ services:
       - "API__BASE_URL=${APIBASEURL}"
       - "API__USERNAME=${APIUSERNAME}"
       - "API__PASSWORD=${APIPASSWORD}"
+      - "ONLY_INVALID=${ONLYINVALID}"
     depends_on:
       - postgres
-    extra_hosts:
-      - "arkivet.syna.se:192.168.88.153"
   api:
-    image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/slussen/api
-    # build: api
+    #image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/slussen/api
+    build: ../../slussen
     ports:
       - 4000:4000
+    restart: unless-stopped
     networks:
       - sublet-detector
     environment:
@@ -63,6 +81,7 @@ services:
     image: postgres:12.2-alpine
     networks:
       - sublet-detector
+    restart: unless-stopped
     environment:
       - "TZ=Europe/Stockholm"
       - "POSTGRES_DB=${POSTGRESDATABASE}"

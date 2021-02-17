@@ -1,14 +1,29 @@
 # Installing Slussen and Matcha kontraktet as a Docker stack
 
 1. Install docker
-2. Set your desired super user login in the .env file (POSTGRESUSER and POSTGRESPASSWORD)
-3. Update .env: set APIUSERNAME and APIPASSWORD to the username and password of your choice.
-4. Get a personal login token from your github account, save it in token.txt
+2. Rename `env.template` to `.env`
+3. Change the following variables:
+   3.1 POSTGRESDBUSER/POSTGRESPASSWORD - superuser that will be created for postgres
+   3.2 APIUSERNAME/APIPASSWORD - service account that will created for Slussen
+   3.3 If you use Syna:
+   3.3.1 SYNAIP - your whitelisted IP at Syna
+   3.3.2 SYNAUSER/SYNACUSTOMERNUMBER - your login at Syna
+   3.4 If you use Creditsafe (TODO)
+   3.5 FASTAPIUSER/FASTAPIPASSWORD - service account to access fastAPI.
+   3.6 FASTAPIBASEURL - URL for fastAPI (usually ends in /v1/api/)
+   3.7 BACKENDURL -
+   3.7 USESSL - if true, will use https for frontend and backen. You need a certificate (.crt and .key files).
+   3.7.1 NGINXCONFDIR - a directory where nginx.conf will be placed, full or relative to where deployment.sh and subsequently docker-compose is run.
+   3.7.2 NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
+   3.7.3 NGINXDOMAIN - the domain name matchning your certificate
+   3.8 BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
+   3.9 GITHUBUSER - the user account used to retrieve docker images (see below)
+4. Get a personal login token with read:packages access from your github account, save it in token.txt (https://https://github.com/settings/tokens)
 5. Run deployment script `sh ./deployment.sh`
-6. Update SYNAIP to the whitelisted IP of your server
-7. Access Matcha kontraktet on http://SERVERIP:3000
+6. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
 
 ## Updating to the latest version
 
-1. Get the latest version of the docker images: `docker-compose pull` (no need to stop running containers)
-2. Update the stack: `docker-compose up -d`
+1. cd to the installation directory (where ./deployment.sh was run)
+2. Get the latest version of the docker images: `docker-compose pull` (no need to stop running containers)
+3. Update the stack: `docker-compose up -d`
