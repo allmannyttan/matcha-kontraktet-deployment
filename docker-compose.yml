@@ -83,13 +83,9 @@ services:
       - "POSTGRES_USER=${POSTGRESUSER}"
       - "POSTGRES_PASSWORD=${POSTGRESPASSWORD}"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - /srv/matcha-kontraktet/db-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
 
 networks:
   matcha-kontraktet:
-
-volumes:
-  db-data:
-    driver: local
