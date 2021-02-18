@@ -24,6 +24,7 @@ services:
       - matcha-kontraktet
     environment:
       - "REACT_APP_API_BASE_URL=${BACKENDURL}"
+      - "REACT_APP_LOGO=${LOGONAME}"
     depends_on:
       - backend
   backend:
