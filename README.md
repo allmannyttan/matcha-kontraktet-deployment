@@ -19,7 +19,7 @@
       3. NGINXDOMAIN - the domain name matchning your certificate
    8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
    9. GITHUBUSER - the user account used to retrieve docker images (see below)
-5. Get a personal login token with read:packages access from your github account, save it in token.txt (https://https://github.com/settings/tokens)
+5. Get a personal login token with read:packages access from your github account, save it in token.txt (https://github.com/settings/tokens)
 6. Run deployment script `sh ./deployment.sh`
 7. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
 
