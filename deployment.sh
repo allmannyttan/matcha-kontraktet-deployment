@@ -1,3 +1,7 @@
+
+# Avoid users to run as root / sudo
+if [[ $(id -u) = 0 ]] ; then echo "Please do not run as root\nAdd the user you want to run under to the docker group." ; exit 1 ; fi
+
 getvariable() {
   echo $(grep ^$1 .env | cut -d '=' -f2)
 }
