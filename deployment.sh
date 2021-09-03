@@ -29,7 +29,7 @@ insertuser()  {
 
 printf "Creating nginx config\n"
 
-if [ $USESSL == 'true' ]
+if [ $USESSL = 'true' ]
 then
   cp nginx-ssl.conf $NGINXCONFDIR/nginx.conf
   sed -i.bak "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
