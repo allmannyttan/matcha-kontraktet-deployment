@@ -16,7 +16,7 @@ services:
       - backend
       - api
   frontend:
-    image: docker.pkg.github.com/allmannyttan/matcha-kontraktet-frontend/matcha-kontraktet-frontend
+    image: anderslarsson/matcha-kontraktet-frontend
     ports:
       - 3000:80
     restart: unless-stopped
@@ -28,7 +28,7 @@ services:
     depends_on:
       - backend
   backend:
-    image: docker.pkg.github.com/allmannyttan/matcha-kontraktet-backend/matcha-kontraktet-backend
+    image: anderslarsson/matcha-kontraktet-backend
     ports:
       - 9000:9000
     restart: unless-stopped
@@ -55,7 +55,7 @@ services:
     depends_on:
       - postgres
   api:
-    image: docker.pkg.github.com/allmannyttan/slussen/slussen
+    image: anderslarsson/slussen
     ports:
       - 4000:4000
     restart: unless-stopped

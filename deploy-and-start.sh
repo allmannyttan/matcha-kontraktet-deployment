@@ -1,3 +1,5 @@
+#!/bin/bash
+
 getvariable() {
   echo $(grep ^$1 .env | cut -d '=' -f2)
 }
@@ -17,6 +19,8 @@ NGINXSSLDIR=$(getvariable "NGINXSSLDIR")
 NGINXDOMAIN=$(getvariable "NGINXDOMAIN")
 USESSL=$(getvariable "USESSL")
 GITHUBUSER=$(getvariable "GITHUBUSER")
+SSLCRTFILENAME=$(getvariable "SSLCRTFILENAME")
+SSLKEYFILENAME=$(getvariable "SSLKEYFILENAME")
 
 insertuser()  {
   echo "Curling to $1"
@@ -27,12 +31,47 @@ insertuser()  {
   docker-compose exec -d postgres psql $3 -U $POSTGRESUSER -c "INSERT INTO "users" ("username", "locked", "disabled", "password_hash", "salt") VALUES ('$4', 'false', 'false', '$password', '$salt');"
 }
 
+try() {
+  count=1
+  while $1
+  do  
+    echo "Waiting"
+    ((count++))
+    if [ $count -gt $2 ]
+    then
+      echo $4
+      exit 1
+    fi
+    sleep $3
+  done
+}
+
+dbIsRunning() {
+  local dbExists=$(docker-compose exec postgres psql $POSTGRESDATABASE -U $POSTGRESUSER -c "SELECT datname FROM pg_catalog.pg_database WHERE datname='subletdetector'")
+  local rowStr="(1 row)" 
+  if [[ "$dbExists" == *"$rowStr"* ]]
+  then 
+    return 1
+  else 
+    return 0
+  fi  
+}
+
+backendRunning() {
+  if [ $(curl -o /dev/null -s -w "%{http_code}" $BACKENDURL) -ne 200 ]
+  then 
+    return 0
+  else 
+    return 1
+  fi
+}
+
 printf "Creating nginx config\n"
 
-if [ $USESSL == 'true' ]
+if [ $USESSL = 'true' ]
 then
   cp nginx-ssl.conf $NGINXCONFDIR/nginx.conf
-  sed -i.bak "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
+  sed -i.bak -e "s|SSLPATHCERT|/etc/ssl/${SSLCRTFILENAME}|g" -e "s|SSLPATHKEY|etc/ssl/${SSLKEYFILENAME}|g" -e "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
 else
   cp nginx.conf $NGINXCONFDIR/nginx.conf
 fi
@@ -42,17 +81,17 @@ cat $NGINXCONFDIR/nginx.conf
 printf "Starting up postgres\n"
 docker-compose up -d postgres
 
-# When in doubt - set timeout. This should be handled correctly.
-sleep 20
-printf "\nCreating database $APIDATABASE\n"
-docker-compose exec -d postgres psql $POSTGRESDATABASE -U $POSTGRESUSER -c "create database \"$APIDATABASE\""
+# Wait until db is up (max 10 times)
+try dbIsRunning 10 10 "Failed to startup postgres database"
 
-printf "\nLogin into docker\n"
-cat token.txt | docker login https://docker.pkg.github.com -u $GITHUBUSER --password-stdin && docker-compose up -d
+printf "\nCreating database $APIDATABASE\n"
+docker-compose exec postgres psql $POSTGRESDATABASE -U $POSTGRESUSER -c "create database \"$APIDATABASE\""
 
 printf "\nStarting up all services\n"
 docker-compose up -d
-sleep 10 # Wait for API to be healthy before creating user
+
+# Wait until db is up (max 10 times)
+try backendRunning 10 10 "Failed to startup backend"
 
 printf "\nInserting user $user into $APIDATABASE\n"
 insertuser $BACKENDURL $apipw $APIDATABASE $apiuser
