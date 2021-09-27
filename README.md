@@ -2,8 +2,9 @@
 
 1. Install Docker Engine (https://docs.docker.com/engine/install/)
 2. Install Docker Compose (https://docs.docker.com/compose/install/)
-3. Rename `env.template` to `.env`
-4. Change the following variables:
+3. Add your user to the docker group: `sudo usermod -aG docker $(whoami)`
+4. Rename `env.template` to `.env`
+5. Change the following variables:
    1. POSTGRESDBUSER/POSTGRESPASSWORD - superuser that will be created for postgres
    2. APIUSERNAME/APIPASSWORD - service account that will created for Slussen
    3. If you use Syna:
@@ -18,9 +19,10 @@
       2. NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
       3. NGINXDOMAIN - the domain name matchning your certificate
    8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
-   9. LOGONAME - Company logo in application.
-5. Run deployment script `sh ./deploy-and-start.sh`
-6. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
+   9. LOGOPATH - Folder where a compant logo can be found
+   10. LOGONAME - Company logo in application.
+6. Run deployment script `sh ./deploy-and-start.sh`
+7. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
 
 ## Stoping the service
 

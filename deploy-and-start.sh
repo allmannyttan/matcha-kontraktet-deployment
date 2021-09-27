@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Avoid users to run as root / sudo
+if [[ $(id -u) = 0 ]] ; then echo "Please do not run as root\nAdd the user you want to run under to the docker group." ; exit 1 ; fi
+
 getvariable() {
   echo $(grep ^$1 .env | cut -d '=' -f2)
 }
@@ -19,8 +22,8 @@ NGINXSSLDIR=$(getvariable "NGINXSSLDIR")
 NGINXDOMAIN=$(getvariable "NGINXDOMAIN")
 USESSL=$(getvariable "USESSL")
 GITHUBUSER=$(getvariable "GITHUBUSER")
-SSLCRTFILENAME=$(getvariable "SSLCRTFILENAME")
-SSLKEYFILENAME=$(getvariable "SSLKEYFILENAME")
+SSLCRTPATH=$(getvariable "SSLCRTPATH")
+SSLKEYPATH=$(getvariable "SSLKEYPATH")
 
 insertuser()  {
   echo "Curling to $1"
@@ -71,9 +74,9 @@ printf "Creating nginx config\n"
 if [ $USESSL = 'true' ]
 then
   cp nginx-ssl.conf $NGINXCONFDIR/nginx.conf
-  sed -i.bak -e "s|SSLPATHCERT|/etc/ssl/${SSLCRTFILENAME}|g" -e "s|SSLPATHKEY|etc/ssl/${SSLKEYFILENAME}|g" -e "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
+  sed -i.bak -e "s|SSLCRTPATH|/etc/ssl/${SSLCRTPATH}|g" -e "s|SSLKEYPATH|etc/ssl/${SSLKEYPATH}|g" -e "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
 else
-  cp nginx.conf $NGINXCONFDIR/nginx.conf
+  cp nginx-nossl.conf $NGINXCONFDIR/nginx.conf
 fi
 
 cat $NGINXCONFDIR/nginx.conf
