@@ -16,7 +16,7 @@ services:
       - backend
       - api
   frontend:
-    image: anderslarsson/matcha-kontraktet-frontend
+    image: allmannyttan/matcha-kontraktet-frontend
     ports:
       - 3000:80
     restart: unless-stopped
@@ -30,7 +30,7 @@ services:
     depends_on:
       - backend
   backend:
-    image: anderslarsson/matcha-kontraktet-backend
+    image: allmannyttan/matcha-kontraktet-backend
     ports:
       - 9000:9000
     restart: unless-stopped
@@ -57,7 +57,7 @@ services:
     depends_on:
       - postgres
   api:
-    image: anderslarsson/slussen
+    image: allmannyttan/slussen
     ports:
       - 4000:4000
     restart: unless-stopped

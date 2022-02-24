@@ -13,14 +13,14 @@
    4. If you use Creditsafe (TODO)
    5. FASTAPIUSER/FASTAPIPASSWORD - service account to access fastAPI.
    6. FASTAPIBASEURL - URL for fastAPI (usually ends in /v1/api/)
-   7. BACKENDURL - URL for the 
+   7. BACKENDURL - URL for the
    8. USESSL - if true, will use https for frontend and backen. You need a certificate (.crt and .key files).
       1. NGINXCONFDIR - a directory where nginx.conf will be placed, full or relative to where deployment.sh and subsequently docker-compose is run.
       2. NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
       3. NGINXDOMAIN - the domain name matchning your certificate
-   8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
-   9. LOGOPATH - Folder where a compant logo can be found
-   10. LOGONAME - Company logo in application.
+   9. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
+   10. LOGOPATH - Folder where a compant logo can be found
+   11. LOGONAME - Company logo in application; logo-<LOGONAME>.png.
 6. Run deployment script `sh ./deploy-and-start.sh`
 7. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
 
@@ -32,7 +32,7 @@ Run `docker-compose down`
 
 Run `docker-compose up -d`
 
-All settings can be changed and will take effect after service restart. Though, USESSL has no effect so if going from or to SSL, you need to manually make sure that the correct nginx.conf file is used and configured appropriately. 
+All settings can be changed and will take effect after service restart. Though, USESSL has no effect so if going from or to SSL, you need to manually make sure that the correct nginx.conf file is used and configured appropriately.
 
 ## Reinstallation
 
