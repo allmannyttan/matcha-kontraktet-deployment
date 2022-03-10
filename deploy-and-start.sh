@@ -74,7 +74,7 @@ printf "Creating nginx config\n"
 if [ $USESSL = 'true' ]
 then
   cp nginx-ssl.conf $NGINXCONFDIR/nginx.conf
-  sed -i.bak -e "s|SSLCRTPATH|/etc/ssl/${SSLCRTPATH}|g" -e "s|SSLKEYPATH|etc/ssl/${SSLKEYPATH}|g" -e "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
+  sed -i.bak -e "s|SSLCRTPATH|/etc/ssl/${SSLCRTPATH}|g" -e "s|SSLKEYPATH|/etc/ssl/${SSLKEYPATH}|g" -e "s|DOMAIN|${NGINXDOMAIN}|g" $NGINXCONFDIR/nginx.conf
 else
   cp nginx-nossl.conf $NGINXCONFDIR/nginx.conf
 fi
