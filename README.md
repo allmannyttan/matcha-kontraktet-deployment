@@ -1,8 +1,10 @@
 # Installing Slussen and Matcha kontraktet as a Docker stack
 
-1. Install docker
-2. Rename `env.template` to `.env`
-3. Change the following variables:
+1. Install Docker Engine (https://docs.docker.com/engine/install/)
+2. Install Docker Compose (https://docs.docker.com/compose/install/)
+3. Add your user to the docker group: `sudo usermod -aG docker $(whoami)`
+4. Rename `env.template` to `.env`
+5. Change the following variables:
    1. POSTGRESDBUSER/POSTGRESPASSWORD - superuser that will be created for postgres
    2. APIUSERNAME/APIPASSWORD - service account that will created for Slussen
    3. If you use Syna:
@@ -18,9 +20,23 @@
       3. NGINXDOMAIN - the domain name matchning your certificate
    8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
    9. GITHUBUSER - the user account used to retrieve docker images (see below)
-4. Get a personal login token with read:packages access from your github account, save it in token.txt (https://https://github.com/settings/tokens)
-5. Run deployment script `sh ./deployment.sh`
-6. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
+6. Get a personal login token with read:packages access from your github account, save it in token.txt (https://github.com/settings/tokens)
+7. Run deployment script `sh ./deployment.sh`
+8. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
+
+## Managing users
+
+You can list, add and remove users by running the `userAdmin.sh` script.
+
+```
+Syntax: userAdmin [-h|-a|-d|-l]
+
+options:
+-h        Print this Help.
+-a user   Add user.
+-d user   Delete user.
+-l        List existing users.
+```
 
 ## Updating to the latest version
 
