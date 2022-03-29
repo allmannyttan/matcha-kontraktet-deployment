@@ -24,6 +24,20 @@
 7. Run deployment script `sh ./deployment.sh`
 8. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
 
+## Managing users
+
+You can list, add and remove users by running the `userAdmin.sh` script.
+
+```
+Syntax: userAdmin [-h|-a|-d|-l]
+
+options:
+-h        Print this Help.
+-a user   Add user.
+-d user   Delete user.
+-l        List existing users.
+```
+
 ## Updating to the latest version
 
 1. cd to the installation directory (where ./deployment.sh was run)
