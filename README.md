@@ -18,7 +18,7 @@
       2. NGINXSSLDIR - a directory where you place certificate.crt and certificate.key, full or relative to where deployment.sh and subsequently docker-compose is run.
       3. NGINXDOMAIN - the domain name matchning your certificate
    8. BACKENDURL - https://NXGINXDOMAIN/backend (or http://localhost/backend if USESSL is false)
-   9. LOGOPATH - Folder where a compant logo can be found
+   9. LOGOPATH - Folder where a company logo can be found
    10. LOGONAME - Company logo in application; logo-<LOGONAME>.png.
 6. Run deployment script `sh ./deploy-and-start.sh`
 7. Access the service at https://NGINXDOMAIN or (http://localhost if USESSL is false)
